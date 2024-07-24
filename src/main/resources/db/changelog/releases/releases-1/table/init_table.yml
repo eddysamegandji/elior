@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: accounting_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: article_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: expense_table.sql
+      relativeToChangelogFile: true
