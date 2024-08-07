@@ -5,11 +5,12 @@ export default class Accounting {
   constructor(
     public id: number | null,
     public eventName: string,
-    public eventDate: Date,
+    public eventDate: Date | null,
     public employeeName: string,
     public flooz: number,
     public tmoney: number,
     public unpaid: number,
+    public organizerPercent: number,
     public articles: Article[],
     public expenses: Expense[]
   ) {}

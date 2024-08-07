@@ -1,4 +1,6 @@
 import DailySalesView from '@/views/DailySalesView.vue'
+import AccountingListView from '@/views/AccountingListView.vue'
+import ProductListView from '@/views/admin/ProductListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -6,8 +8,18 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'dailySales',
       component: DailySalesView
+    },
+    {
+      path: '/accountingList',
+      name: 'accountingList',
+      component: AccountingListView
+    },
+    {
+      path: '/products',
+      name: 'products',
+      component: ProductListView
     }
   ]
 })

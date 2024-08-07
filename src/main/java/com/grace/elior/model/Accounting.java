@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.*;
 
 @Getter
@@ -29,16 +27,14 @@ public class Accounting implements Serializable {
     private Double tmoney = 0.0;
     @Builder.Default
     private Double unpaid = 0.0;
-    @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Article> articles = new ArrayList<>();
-    @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Expense> expenses = new ArrayList<>();
     @Builder.Default
     private Double totalPurcharsePrice = 0.0;
     @Builder.Default
     private Double totalSellingPrice = 0.0;
     @Builder.Default
-    private Double eventPercent = 0.0;
+    private Integer organizerPercent = 0;
+    @Builder.Default
+    private Double eventOrganizerCommission = 0.0;
     @Builder.Default
     private Double totalBenefit = 0.0;
     @Builder.Default
@@ -47,16 +43,20 @@ public class Accounting implements Serializable {
     private Double pureExpense = 0.0;
     @Builder.Default
     private Double totalExpense = 0.0;
+    @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Article> articles = new ArrayList<>();
+    @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses = new ArrayList<>();
 
     @PrePersist
     @PreUpdate
     public void calculate () {
-        this.totalPurcharsePrice = Optional.ofNullable(this.articles).orElse(Collections.emptyList()).stream().mapToDouble(Article::getPurchasePrice).sum();
-        this.totalSellingPrice = Optional.ofNullable(this.articles).orElse(Collections.emptyList()).stream().mapToDouble(Article::getSellingPrice).sum();
+        this.totalPurcharsePrice = this.articles.stream().mapToDouble(Article::getTotalArticlePurchasePrice).sum();
+        this.totalSellingPrice = this.articles.stream().mapToDouble(Article::getSellingPrice).sum();
         this.totalBenefit = this.totalSellingPrice - this.totalPurcharsePrice;
-        this.pureExpense = Optional.ofNullable(this.expenses).orElse(Collections.emptyList()).stream().mapToDouble(Expense::getPrice).sum();
-        this.eventPercent = (this.totalBenefit + this.pureExpense) * 0.4;
-        this.totalExpense = this.pureExpense + this.eventPercent;
+        this.pureExpense = this.expenses.stream().mapToDouble(Expense::getPrice).sum();
+        this.eventOrganizerCommission = (this.totalBenefit - this.pureExpense) * (organizerPercent / 100.0);
+        this.totalExpense = this.pureExpense + this.eventOrganizerCommission;
         this.realBenefit = this.totalBenefit - this.totalExpense;
     }
 }

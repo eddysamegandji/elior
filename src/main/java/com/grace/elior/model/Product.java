@@ -2,26 +2,25 @@ package com.grace.elior.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
-@Entity
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
-public class Expense implements Serializable {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String denomination;
+    private String name;
     @Builder.Default
-    private Double price = 0.0;
-    private LocalDate expenseDate;
-    @ManyToOne
-    @JoinColumn(name="accounting_id")
-    private Accounting accounting;
+    private Double unitPurchasePrice = 0.0;
+    @OneToMany(mappedBy = "product")
+    private List<Article> articles;
+
 }

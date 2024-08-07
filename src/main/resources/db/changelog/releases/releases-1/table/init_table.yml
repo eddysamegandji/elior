@@ -3,6 +3,9 @@ databaseChangeLog:
       file: accounting_table.sql
       relativeToChangelogFile: true
   - include:
+      file: product_table.sql
+      relativeToChangelogFile: true
+  - include:
       file: article_table.sql
       relativeToChangelogFile: true
   - include:

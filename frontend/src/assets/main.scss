@@ -1,0 +1,115 @@
+:root {
+    --font-family: "Noto Sans";
+    --font-size-xs: 12px;
+    --font-size-small: 14px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+    --font-size-xl: 24px;
+    --color-text: #09092D;
+    --color-primary: #4C4C8E;
+    --color-secondary: #1F1F59;
+    --color-app-background: #F3F3F7;
+    --color-background: white;
+    --color-active-background: #E4E4FF;
+    --color-active-text: #3535CD;
+    --color-secondary-blue: #5959EB;
+    --color-input: #B0B0CD;
+    --color-background-secondary: #EBEBF1;
+    --color-chip: #1717AB;
+    --color-background-chip: #CCCCFF;
+    --border-color: #D7D7E4;
+    --border-radius: 4px;
+}
+
+.btn-menu {
+    color: var(--color-secondary) !important;
+    font-size: var(--font-size-medium) !important;
+    text-transform: none !important;
+    font-family: var(--font-family) !important;
+    letter-spacing: 0px !important;
+    background: var(--color-background) !important;
+    border-radius: var(--border-radius) !important;
+    margin: 1px !important;
+}
+
+.v-field {
+    border: 1px solid var(--color-input) !important;
+
+    .v-chip {
+        color: var(--color-active-text);
+        font-weight: 700;
+    }
+}
+
+.v-field--focused {
+    border: 1px solid var(--color-active-text) !important;
+}
+
+.accountingTable,
+.productTable {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: transparent;
+
+    th {
+        height: 32px !important;
+        font-weight: bold !important;
+        line-height: .8rem;
+    }
+
+    td {
+        height: 44px !important;
+    }
+}
+
+.v-table {
+    color: var(--color-secondary) !important;
+}
+
+.v-btn--active {
+    background: var(--color-active-background) !important;
+    color: var(--color-active-text) !important;
+}
+
+.xs-field {
+    max-width: 140px;
+}
+
+.sm-field {
+    max-width: 200px
+}
+
+.leftmenu {
+    .v-list-item__overlay {
+        display: none;
+    }
+
+    .leftMenuItemTitle {
+        color: #1F1F59;
+    }
+}
+
+.filter {
+    font-size: var(--font-size-xs) !important;
+    text-transform: capitalize;
+    height: 26px !important;
+    max-width: fit-content;
+    min-width: 100px;
+
+    input::placeholder {
+        color: var(--color-primary) !important;
+        font-size: var(--font-size-xs);
+        opacity: 1;
+        padding: 0 4px;
+    }
+
+    .v-field__field,
+    .v-field__input {
+        height: 24px !important;
+        padding: 0 4px;
+        min-height: 25px !important;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
