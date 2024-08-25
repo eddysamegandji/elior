@@ -2,7 +2,7 @@ spring:
   application:
     name: elior
   datasource:
-    url: jdbc:postgresql://localhost:5433/db_elior
+    url: jdbc:postgresql://localhost:5432/db_elior
     username: elior
     password: elior
   jpa:
