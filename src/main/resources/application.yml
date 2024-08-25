@@ -2,12 +2,12 @@ spring:
   application:
     name: elior
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_elior
+    url: jdbc:postgresql://localhost:5433/db_elior
     username: elior
     password: elior
   jpa:
     show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
 

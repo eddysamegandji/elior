@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Product (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGSERIAL NOT NULL,
     name VARCHAR(255) NOT NULL,
-    unit_purchase_price DOUBLE DEFAULT 0.0,
+    unit_purchase_price DOUBLE PRECISION DEFAULT 0.0,
     PRIMARY KEY (id)
 );

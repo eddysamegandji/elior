@@ -33,7 +33,6 @@ onMounted(async () => {
     try {
         const response = await HTTP.get("product")
         products.value = response.data
-        console.log(products.value)
     } catch (error) {
         console.error("Erreur lors de la récupération des produits", error)
     }
