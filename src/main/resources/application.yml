@@ -2,6 +2,7 @@ spring:
   application:
     name: elior
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/db_elior
     username: elior
     password: elior
