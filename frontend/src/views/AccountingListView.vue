@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import HTTP from '@/services/axios'
 
 const dialog = ref(false)
 let accountings = ref<any[]>([])
+let dateRange = ref([])
+
 const headers = [
     { title: "Date", key: 'eventDate' },
     { title: "Nom de l'evenement", key: 'eventName' },
@@ -18,71 +20,71 @@ const headers = [
     { title: 'Actions', key: 'actions' },
 ]
 
-onMounted(async () => {
-    try {
-        const response = await HTTP.get("accounting")
-        accountings.value = Array.isArray(response.data) ? response.data : []
-    } catch (error) {
-        console.error("Erreur lors de la récupération des comptes", error)
+watch(dateRange, async (newRange) => {
+  try {
+    let url
+    if (newRange && newRange.length === 2) {
+      url = `accountings?startDate=${newRange[0]}&endDate=${newRange[1]}`
+    } else {
+      url = 'accounting'
     }
-})
+
+    const response = await HTTP.get(url);
+    accountings.value = Array.isArray(response.data) ? response.data : []
+  } catch (error) {
+    console.error("Erreur lors de la récupération des comptes", error)
+  }
+}, { immediate: true })
+
 function formatDate(dateTime: string | number | Date) {
     const date = new Date(dateTime)
     const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
     const dayOfWeek = days[date.getUTCDay()]
     return `${dayOfWeek}, ${date.toLocaleDateString()}`
 }
-
-function changeStatus() {
-    storeUser.activation(onEditingUser.value.id).then(
-        () => {
-            this.storeUser.getListUsers()
-        },
-        (error) => {
-            console.log("Error logout")
-        }
-    )
-    onEditingUser.value = null
-    dialog.value = false
-}
-function closeDialog() {
-    onEditingUser.value.isactive = !onEditingUser.value.isactive
-    dialog.value = false
-}
-
 let sortBy = [{ key: 'eventDate', order: 'asc' }]
 
 </script>
 
 <template>
     <div class="pa-10">
-        <v-row>
-            <v-data-table v-model:sort-by="sortBy" :headers="headers" :items="accountings"
-                itemsPerPageText="Nombre d'entrées à afficher :" class="accountingTable">
-                <template v-slot:item.eventDate="{ item }">
-                    <v-chip color="black">
-                        {{ formatDate(item['eventDate']) }}
-                    </v-chip>
-                </template>
-                <template v-slot:item.totalExpense="{ item }">
-                    <v-chip color="error">
-                        {{ item.totalExpense }}
-                    </v-chip>
-                </template>
-                <template v-slot:item.realBenefit="{ item }">
-                    <v-chip color="success">
-                        {{ item.realBenefit }}
-                    </v-chip>
-                </template>
-                <template v-slot:item.actions="{ item }">
-                    <div class="noWrap">
-                        <v-icon icon="bi bi-pencil-square" color="primary" style="margin-right: 15px;"
-                            click="editItem(item.id)"></v-icon>
-                        <v-icon icon="bi bi-trash" color="red" click="editItem(item.id)"></v-icon>
-                    </div>
-                </template>
-            </v-data-table>
-        </v-row>
+      <v-row>
+        <v-col>
+          <h1>Liste des comptes</h1>
+        </v-col>
+        <v-col cols="3">
+          <VueDatePicker v-model="dateRange" range model-type="yyyy-MM-dd" format="dd/MM/yyyy" :enable-time-picker="false" auto-apply />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-data-table v-model:sort-by="sortBy" :headers="headers" :items="accountings"
+              itemsPerPageText="Nombre d'entrées à afficher :" class="accountingTable">
+              <template v-slot:item.eventDate="{ item }">
+                  <v-chip color="black">
+                      {{ formatDate(item.eventDate) }}
+                  </v-chip>
+              </template>
+              <template v-slot:item.totalExpense="{ item }">
+                  <v-chip color="error">
+                      {{ item.totalExpense }}
+                  </v-chip>
+              </template>
+              <template v-slot:item.realBenefit="{ item }">
+                  <v-chip color="success">
+                      {{ item.realBenefit }}
+                  </v-chip>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                  <div class="noWrap">
+                      <v-icon icon="bi bi-pencil-square" color="primary" style="margin-right: 15px;"
+                          click="editItem(item.id)"></v-icon>
+                      <v-icon icon="bi bi-trash" color="red" @click="editItem(item.id)"></v-icon>
+                  </div>
+              </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
     </div>
     <v-dialog v-model="dialog" max-width="400" persistent>
         <v-card>

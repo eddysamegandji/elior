@@ -48,8 +48,6 @@ public class Accounting implements Serializable {
     @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
 
-    @PrePersist
-    @PreUpdate
     public void calculate () {
         this.totalPurcharsePrice = this.articles.stream().mapToDouble(Article::getTotalArticlePurchasePrice).sum();
         this.totalSellingPrice = this.articles.stream().mapToDouble(Article::getSellingPrice).sum();

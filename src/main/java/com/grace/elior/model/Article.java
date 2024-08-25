@@ -32,8 +32,6 @@ public class Article implements Serializable {
     @JoinColumn(name="accounting_id")
     private Accounting accounting;
 
-    @PrePersist
-    @PreUpdate
     public void calculateBenefit() {
         this.totalArticlePurchasePrice += this.product.getUnitPurchasePrice() * this.quantity;
         this.benefit = this.sellingPrice - this.totalArticlePurchasePrice;
