@@ -18,6 +18,7 @@ public class CorsConfig {
         corsConfiguration.addAllowedOrigin("http://localhost:5173");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addExposedHeader("content-disposition");
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }

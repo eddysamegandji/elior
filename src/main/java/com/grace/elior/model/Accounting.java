@@ -48,12 +48,35 @@ public class Accounting implements Serializable {
     @OneToMany(mappedBy = "accounting", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
 
+    public void reloadData() {
+        this.articles.forEach(a -> {
+            a.setTotalArticlePurchasePrice(0.0);
+            a.setBenefit(0.0);
+        });
+        this.totalPurcharsePrice = 0.0;
+        this.totalSellingPrice = 0.0;
+        this.eventOrganizerCommission = 0.0;
+        this.totalBenefit = 0.0;
+        this.realBenefit = 0.0;
+        this.pureExpense = 0.0;
+        this.totalExpense = 0.0;
+    }
+
     public void calculate () {
         this.totalPurcharsePrice = this.articles.stream().mapToDouble(Article::getTotalArticlePurchasePrice).sum();
         this.totalSellingPrice = this.articles.stream().mapToDouble(Article::getSellingPrice).sum();
         this.totalBenefit = this.totalSellingPrice - this.totalPurcharsePrice;
         this.pureExpense = this.expenses.stream().mapToDouble(Expense::getPrice).sum();
         this.eventOrganizerCommission = (this.totalBenefit - this.pureExpense) * (organizerPercent / 100.0);
+        this.totalExpense = this.pureExpense + this.eventOrganizerCommission;
+        this.realBenefit = this.totalBenefit - this.totalExpense;
+    }
+
+    public void calculateTotal () {
+        this.totalPurcharsePrice = this.articles.stream().mapToDouble(Article::getTotalArticlePurchasePrice).sum();
+        this.totalSellingPrice = this.articles.stream().mapToDouble(Article::getSellingPrice).sum();
+        this.totalBenefit = this.totalSellingPrice - this.totalPurcharsePrice;
+        this.pureExpense = this.expenses.stream().mapToDouble(Expense::getPrice).sum();
         this.totalExpense = this.pureExpense + this.eventOrganizerCommission;
         this.realBenefit = this.totalBenefit - this.totalExpense;
     }

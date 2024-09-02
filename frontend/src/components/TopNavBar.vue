@@ -10,7 +10,8 @@ const toolbarItems = ref([
 ])
 
 const admins = ref([
-    { text: 'Produits', icon: 'mdi-domain', to: '/products' }
+    { text: 'Produits', icon: 'mdi-liquor', to: '/products' },
+  { text: 'Rapports', icon: 'mdi-file-export', to: '/reports' }
 ])
 
 </script>

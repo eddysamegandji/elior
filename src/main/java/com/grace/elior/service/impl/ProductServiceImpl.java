@@ -6,6 +6,7 @@ import com.grace.elior.model.Product;
 import com.grace.elior.repository.ProductRepository;
 import com.grace.elior.service.ProductService;
 import jakarta.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getProducts() {
-        return productRepository.findAll().stream().map(productMapper::toDto).toList();
+        return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getName)).map(productMapper::toDto).toList();
     }
 
     @Override
