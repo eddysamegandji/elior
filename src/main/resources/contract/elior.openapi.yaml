@@ -69,6 +69,68 @@ paths:
           $ref: "#/components/responses/InternalServerError"
 
   /accounting/{id}:
+    get:
+      summary: Get an accounting
+      tags:
+        - accountingResource
+      operationId: getAccounting
+      parameters:
+        - name: id
+          description: "id of the accounting"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: "Accounting retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accounting'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+    patch:
+      summary: Update accounting
+      tags:
+        - accountingResource
+      operationId: updateAccounting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the accounting
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounting'
+      responses:
+        '200':
+          description: Updated accounting information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accounting'
+        '400':
+          description: Invalid request body
+        '404':
+          description: Accounting not found
+
     delete:
       summary: Delete accounting
       tags:
@@ -240,6 +302,46 @@ paths:
       responses:
         204:
           description: "No content"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /report:
+    get:
+      summary: "Get accounting report"
+      tags:
+        - reportResource
+      operationId: accountingReportWithRange
+      parameters:
+        - name: startDate
+          in: query
+          description: Start date of the range
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: End date of the range
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: "List retrieved successfully"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         400:
           $ref: '#/components/responses/BadRequest'
         401:

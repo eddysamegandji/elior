@@ -36,6 +36,11 @@ public class AccountingController implements AccountingResourceApi {
     }
 
     @Override
+    public ResponseEntity<AccountingDto> getAccounting(Long id) {
+        return of(accountingService.getAccounting(id));
+    }
+
+    @Override
     public ResponseEntity<List<AccountingDto>> getAccountings() {
         List<AccountingDto> accountingList = accountingService.getAllAccounting();
         return accountingList.isEmpty() ? noContent().build() : ok(accountingList);
@@ -47,6 +52,16 @@ public class AccountingController implements AccountingResourceApi {
         LocalDate endLocalDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         List<AccountingDto> accountingList = accountingService.getAllAccounting(startLocalDate, endLocalDate);
         return accountingList.isEmpty() ? noContent().build() : ok(accountingList);
+    }
+
+    @Override
+    public ResponseEntity<AccountingDto> updateAccounting(Long id, AccountingDto accountingDto) {
+        if(accountingDto.getId() == null || id == null || !id.equals(accountingDto.getId()) ||
+                accountingDto.getEmployeeName() == null || accountingDto.getEventDate() == null) {
+            return badRequest().build();
+        }
+        Optional<AccountingDto> updatedAccounting = accountingService.updateAccounting(accountingDto);
+        return of(updatedAccounting);
     }
 
     @Override

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS Accounting (
     id BIGSERIAL NOT NULL,
     event_name VARCHAR(255),
-    event_date DATE,
+    event_date DATE unique,
     employee_name VARCHAR(255),
     flooz DOUBLE PRECISION default 0.0,
     tmoney DOUBLE PRECISION default 0.0,

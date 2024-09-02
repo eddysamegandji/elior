@@ -23,25 +23,32 @@ public class AccountingServiceImpl implements AccountingService {
 
     @Override
     public Optional<AccountingDto> createAccounting(AccountingDto accountingDto) {
-        Accounting accounting = accountingMapper.toEntity(accountingDto);
-        accounting.getExpenses().forEach(a -> a.setAccounting(accounting));
-        accounting.getArticles().forEach(a -> {
-            a.setAccounting(accounting);
-            a.calculateBenefit();
-        });
-        accounting.calculate();
-        Accounting savedAccounting = accountingRepository.save(accounting);
+        Accounting savedAccounting = saveAccounting(accountingDto);
         return Optional.of(accountingMapper.toDto(savedAccounting));
     }
 
     @Override
     public Optional<AccountingDto> updateAccounting(AccountingDto accountingDto) {
-        return Optional.empty();
+        Accounting updateAccounting = saveAccounting(accountingDto);
+        return Optional.of(accountingMapper.toDto(updateAccounting));
+    }
+
+    private Accounting saveAccounting(AccountingDto accountingDto) {
+        Accounting accounting = accountingMapper.toEntity(accountingDto);
+        accounting.reloadData();
+        accounting.getExpenses().forEach(a -> a.setAccounting(accounting));
+        accounting.getArticles().forEach(a -> {
+            a.setAccounting(accounting);
+            a.setDate(accounting.getEventDate());
+            a.calculateBenefit();
+        });
+        accounting.calculate();
+        return accountingRepository.save(accounting);
     }
 
     @Override
-    public AccountingDto getAccounting(Long id) {
-        return null;
+    public Optional<AccountingDto> getAccounting(Long id) {
+        return accountingRepository.findById(id).map(accountingMapper::toDto);
     }
 
     @Override

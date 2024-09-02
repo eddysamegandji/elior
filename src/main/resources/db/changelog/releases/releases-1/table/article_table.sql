@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS Article (
     accounting_id BIGINT,
     primary key (id),
     FOREIGN KEY (product_id) REFERENCES Product(id),
-    FOREIGN KEY (accounting_id) REFERENCES Accounting(id)
+    FOREIGN KEY (accounting_id) REFERENCES Accounting(id),
+    UNIQUE (product_id, accounting_id)
 );
